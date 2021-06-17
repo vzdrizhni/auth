@@ -14,9 +14,10 @@ class UsersController < ApplicationController
 
   # LOGGING IN
   def login
-    @user = User.find_by(username: params[:username])
+    p  user_params['username']
+    @user = User.find_by(username: user_params['username'])
 
-    if @user && @user.authenticate(params[:password])
+    if @user && @user.authenticate(user_params[:password])
       token = encode_token({user_id: @user.id})
       render json: {user: @user, token: token}
     else
@@ -32,6 +33,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:username, :password, :age)
+    params.require(:user).permit(:username, :password, :password_confirmation, :age)
   end
 end
